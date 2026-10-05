@@ -2379,5 +2379,19 @@
     "manually_given": true,
     "description": "Enter a netherum labyrinth.",
     "requirements": [  ]
+  },
+  {
+    "id": "achievement_kill_shadow",
+    "type": "achievement",
+    "name": { "str": "Let There Be Light" },
+    "description": "Kill the Shadow.",
+    "requirements": [ { "event_statistic": "num_avatar_nether_kills", "is": ">=", "target": 1, "visible": "when_achievement_completed" } ]
+  },
+  {
+    "id": "achievement_kill_reclaimer",
+    "type": "achievement",
+    "name": { "str": "Thy Flesh Consumed" },
+    "description": "Kill the Reclaimer.",
+    "requirements": [ { "event_statistic": "num_avatar_nether_kills", "is": ">=", "target": 1, "visible": "when_achievement_completed" } ]
   }
 ]
