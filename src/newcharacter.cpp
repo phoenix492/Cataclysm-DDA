@@ -2576,6 +2576,42 @@ void character_creator_ui::setup_new_uilist()
                 } );
                 break;
             }
+            case CHARCREATOR_SCENARIO: {
+                cc_uistate.recalc_scenario_list( u );
+                std::vector<const scenario *> &sorted_scenarios = cc_uistate.sorted_scenarios;
+                
+                new_uilist->set_category_filter( [&]( const uilist_entry & entry,
+                const std::string & key )->bool {
+                    const scenario * entry_scenario = sorted_scenarios[entry.retval];
+                    if( key == CHARACTER_CREATOR_UILIST_ALL.translated() ) {
+                        return true;
+                    }
+                    if( key == CHARACTER_CREATOR_SCENARIOS_FORGIVING.translated() && entry_scenario->point_cost() >= 1 ) {
+                        return true;
+                    }
+                    if( key == CHARACTER_CREATOR_SCENARIOS_STANDARD.translated() && entry_scenario->point_cost() == 0 ) {
+                        return true;
+                    }
+                    if( key == CHARACTER_CREATOR_SCENARIOS_TOUGH.translated() && entry_scenario->point_cost() == -1 ) {
+                        return true;
+                    }
+                    if( key == CHARACTER_CREATOR_SCENARIOS_CHALLENGE.translated() && entry_scenario->point_cost() <= -2 ) {
+                        return true;
+                    }
+                    return false;
+                } );
+
+                new_uilist->add_category( CHARACTER_CREATOR_UILIST_ALL.translated(), 
+                                          CHARACTER_CREATOR_UILIST_ALL.translated() );
+                new_uilist->add_category( CHARACTER_CREATOR_SCENARIOS_FORGIVING.translated(), 
+                                          CHARACTER_CREATOR_SCENARIOS_FORGIVING.translated() );
+                new_uilist->add_category( CHARACTER_CREATOR_SCENARIOS_STANDARD.translated(), 
+                                          CHARACTER_CREATOR_SCENARIOS_STANDARD.translated() );
+                new_uilist->add_category( CHARACTER_CREATOR_SCENARIOS_TOUGH.translated(), 
+                                          CHARACTER_CREATOR_SCENARIOS_TOUGH.translated() );
+                new_uilist->add_category( CHARACTER_CREATOR_SCENARIOS_CHALLENGE.translated(), 
+                                          CHARACTER_CREATOR_SCENARIOS_CHALLENGE.translated() );
+            }
             default:
                 // do nothing; doesn't use a uilist
                 break;
