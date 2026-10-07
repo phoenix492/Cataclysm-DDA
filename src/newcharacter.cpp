@@ -2630,14 +2630,6 @@ void character_creator_ui::setup_new_uilist()
     }
 }
 
-static void set_uilist_selected( std::shared_ptr<uilist> &menu, int idx )
-{
-    if( !menu->entries.empty() ) {
-        menu->set_selected( idx );
-        menu->scrollby( uilist::scroll_amount::abs( idx ) );
-    }
-}
-
 void character_creator_ui::update_uilist_entries()
 {
     std::shared_ptr<uilist> menu = get_current_tab_uilist();
@@ -2650,35 +2642,42 @@ void character_creator_ui::update_uilist_entries()
     switch( cc_uistate.selected_tab ) {
         case CHARCREATOR_SCENARIO: {
             cc_uistate.recalc_scenario_list( u );
+            const int scenario_count = cc_uistate.sorted_scenarios.size();
 
-            for( const scenario *scen : cc_uistate.sorted_scenarios ) {
-                uilist_entry entry = get_uilist_entry( scen->gender_appropriate_name( u.male ) );
-                entry.text_color = scen == cc_uistate.get_selected_scenario() ? COL_SELECTED : COL_NOT_SELECTED;
-                entry.enabled = scen->can_pick().success();
+            for( int i = 0; i < scenario_count; i++ ) {
+                const scenario* current_scenario = cc_uistate.sorted_scenarios[i];
+                uilist_entry entry = get_uilist_entry( current_scenario->gender_appropriate_name( u.male ) );
+                entry.retval = i;
+                entry.text_color = current_scenario == cc_uistate.get_selected_scenario() ? COL_SELECTED : COL_NOT_SELECTED;
+                entry.enabled = current_scenario->can_pick().success();
                 menu->addentry( entry );
             }
-            set_uilist_selected( menu, cc_uistate.selected_scenario_index );
             break;
         }
         case CHARCREATOR_PROFESSION: {
             cc_uistate.recalc_profession_list( u );
+            const int profession_count = cc_uistate.sorted_professions.size();
 
-            for( const profession_id prof_id : cc_uistate.sorted_professions ) {
-                uilist_entry entry = get_uilist_entry( prof_id->gender_appropriate_name( u.male ) );
-                entry.text_color = prof_id == cc_uistate.get_selected_profession() ? COL_SELECTED :
-                                   COL_NOT_SELECTED;
-                entry.enabled = prof_id->can_pick().success();
+            for( int i = 0; i < profession_count; i++ ) {
+                const profession_id current_profession = cc_uistate.sorted_professions[i];
+                uilist_entry entry = get_uilist_entry( current_profession->gender_appropriate_name( u.male ) );
+                entry.retval = i;
+                entry.text_color = current_profession == cc_uistate.get_selected_profession() ? COL_SELECTED : COL_NOT_SELECTED;
+                entry.enabled = current_profession->can_pick().success();
                 menu->addentry( entry );
             }
-            set_uilist_selected( menu, cc_uistate.selected_profession_index );
             break;
         }
         case CHARCREATOR_BACKGROUND: {
             cc_uistate.recalc_hobby_list( u );
+            const int hobby_count = cc_uistate.sorted_hobbies.size();
 
-            for( const profession_id prof_id : cc_uistate.sorted_hobbies ) {
-                uilist_entry entry = get_uilist_entry( prof_id->gender_appropriate_name( u.male ) );
-                entry.text_color = u.hobbies.count( &*prof_id ) ? COL_SELECTED : COL_NOT_SELECTED;
+            for( int i = 0; i < hobby_count; i++ ) {
+                const profession_id current_hobby = cc_uistate.sorted_hobbies[i];
+                uilist_entry entry = get_uilist_entry( current_hobby->gender_appropriate_name( u.male ) );
+                entry.retval = i;
+                entry.text_color = u.hobbies.count( &*current_hobby ) ? COL_SELECTED : COL_NOT_SELECTED;
+                entry.enabled = current_hobby->can_pick().success();
                 menu->addentry( entry );
             }
             break;
@@ -2701,13 +2700,13 @@ void character_creator_ui::update_uilist_entries()
             const int trait_count = cc_uistate.sorted_traits.size();
             for( int i = 0; i < trait_count; i++ ) {
                 trait_id current_trait = cc_uistate.sorted_traits[i];
-                uilist_entry trait_entry = get_uilist_entry( current_trait->name() );
-                trait_entry.retval = i;
-                trait_entry.text_color = u.has_trait( current_trait ) ? COL_SELECTED : COL_NOT_SELECTED;
-                trait_entry.enabled = !( u.has_conflicting_trait( current_trait ) ||
+                uilist_entry entry = get_uilist_entry( current_trait->name() );
+                entry.retval = i;
+                entry.text_color = u.has_trait( current_trait ) ? COL_SELECTED : COL_NOT_SELECTED;
+                entry.enabled = !( u.has_conflicting_trait( current_trait ) ||
                                          get_scenario()->is_forbidden_trait( current_trait ) ||
                                          u.prof->is_forbidden_trait( current_trait ) );
-                menu->addentry( trait_entry );
+                menu->addentry( entry );
             }
             break;
         }
