@@ -1474,8 +1474,11 @@ The purpose of these flags is to allow reuse of blueprints to create the "same" 
 
 ## Scenarios
 
+- ```FORGIVING``` Sorted into the "FORGIVING" category in the character creation UI.
+- ```STANDARD``` Sorted into the "STANDARD" category in the character creation UI.
+- ```TOUGH``` Sorted into the "TOUGH" category in the character creation UI.
+- ```CHALLENGE``` Sorted into the "CHALLENGE" category in the character creation UI. Also, game won't choose this scenario in random game types.
 - ```BORDERED``` Initial start location is bordered by an enormous wall of solid rock.
-- ```CHALLENGE``` Game won't choose this scenario in random game types.
 - ```CITY_START``` Scenario is available only when city size value in world options is more than 0.
 - ```FIRE_START``` Player starts the game with fire nearby.
 - ```HELI_CRASH``` Player starts the game with various limbs wounds.
