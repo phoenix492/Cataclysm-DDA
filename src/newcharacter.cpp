@@ -2657,7 +2657,7 @@ void character_creator_ui::update_uilist_entries()
                 entry.enabled = scen->can_pick().success();
                 menu->addentry( entry );
             }
-            //set_uilist_selected( menu, cc_uistate.selected_scenario_index );
+            set_uilist_selected( menu, cc_uistate.selected_scenario_index );
             break;
         }
         case CHARCREATOR_PROFESSION: {
