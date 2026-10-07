@@ -235,20 +235,20 @@ static void set_stat_base( avatar &u, character_stat stat, int amt )
         return;
     }
     switch( stat ) {
-    case character_stat::STRENGTH:
-        u.set_str_base( amt );
-        break;
-    case character_stat::DEXTERITY:
-        u.set_dex_base( amt );
-        break;
-    case character_stat::INTELLIGENCE:
-        u.set_int_base( amt );
-        break;
-    case character_stat::PERCEPTION:
-        u.set_per_base( amt );
-        break;
-    default:
-        break;
+        case character_stat::STRENGTH:
+            u.set_str_base( amt );
+            break;
+        case character_stat::DEXTERITY:
+            u.set_dex_base( amt );
+            break;
+        case character_stat::INTELLIGENCE:
+            u.set_int_base( amt );
+            break;
+        case character_stat::PERCEPTION:
+            u.set_per_base( amt );
+            break;
+        default:
+            break;
     }
 }
 
@@ -260,8 +260,8 @@ static int stat_points_used( const Character &u )
 {
     int used = 0;
     for( int stat : {
-                u.get_str_base(), u.get_dex_base(), u.get_int_base(), u.get_per_base()
-            } ) {
+             u.get_str_base(), u.get_dex_base(), u.get_int_base(), u.get_per_base()
+         } ) {
         used += stat + std::max( 0, stat - HIGH_STAT );
     }
     return used;
@@ -459,7 +459,7 @@ void Character::randomize( const bool random_scenario, bool play_now )
         std::vector<const scenario *> scenarios;
         for( const scenario &scen : scenario::get_all() ) {
             if( !scen.has_flag( flag_CHALLENGE ) && !scen.scen_is_blacklisted() &&
-                    ( !scen.has_flag( flag_CITY_START ) || cities_enabled ) && scen.can_pick().success() ) {
+                ( !scen.has_flag( flag_CITY_START ) || cities_enabled ) && scen.can_pick().success() ) {
                 scenarios.emplace_back( &scen );
             }
         }
@@ -541,85 +541,85 @@ void Character::randomize( const bool random_scenario, bool play_now )
             }
         } else {
             switch( rng( 1, 4 ) ) {
-            case 1:
-                if( get_str_base() > 5 ) {
-                    set_str_base( get_str_base() - 1 );
-                }
-                break;
-            case 2:
-                if( get_dex_base() > 5 ) {
-                    set_dex_base( get_dex_base() - 1 );
-                }
-                break;
-            case 3:
-                if( get_int_base() > 5 ) {
-                    set_int_base( get_int_base() - 1 );
-                }
-                break;
-            case 4:
-                if( get_per_base() > 5 ) {
-                    set_per_base( get_per_base() - 1 );
-                }
-                break;
+                case 1:
+                    if( get_str_base() > 5 ) {
+                        set_str_base( get_str_base() - 1 );
+                    }
+                    break;
+                case 2:
+                    if( get_dex_base() > 5 ) {
+                        set_dex_base( get_dex_base() - 1 );
+                    }
+                    break;
+                case 3:
+                    if( get_int_base() > 5 ) {
+                        set_int_base( get_int_base() - 1 );
+                    }
+                    break;
+                case 4:
+                    if( get_per_base() > 5 ) {
+                        set_per_base( get_per_base() - 1 );
+                    }
+                    break;
             }
         }
     }
 
     for( int loops = 0;
-            has_unspent_points( *this ) && loops <= 100000;
-            loops++ ) {
+         has_unspent_points( *this ) && loops <= 100000;
+         loops++ ) {
         multi_pool p( *this );
         const bool allow_stats = p.stat_points_left > 0;
         const bool allow_traits = p.trait_points_left > 0 && num_gtraits < max_trait_points;
         int r = rng( 1, 9 );
         trait_id rn;
         switch( r ) {
-        case 1:
-        case 2:
-        case 3:
-        case 4:
-            if( allow_traits ) {
-                rn = random_good_trait();
-                const mutation_branch &mdata = rn.obj();
-                if( !has_trait( rn ) && p.trait_points_left >= mdata.points &&
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+                if( allow_traits ) {
+                    rn = random_good_trait();
+                    const mutation_branch &mdata = rn.obj();
+                    if( !has_trait( rn ) && p.trait_points_left >= mdata.points &&
                         num_gtraits + mdata.points <= max_trait_points && !has_conflicting_trait( rn ) ) {
-                    toggle_trait_deps( rn );
-                    num_gtraits += mdata.points;
-                }
-                break;
-            }
-            [[fallthrough]];
-        case 5:
-            if( allow_stats ) {
-                switch( rng( 1, 4 ) ) {
-                case 1:
-                    set_str_base( get_str_base() + 1 );
-                    break;
-                case 2:
-                    set_dex_base( get_dex_base() + 1 );
-                    break;
-                case 3:
-                    set_int_base( get_int_base() + 1 );
-                    break;
-                case 4:
-                    set_per_base( get_per_base() + 1 );
+                        toggle_trait_deps( rn );
+                        num_gtraits += mdata.points;
+                    }
                     break;
                 }
-                break;
-            }
-            [[fallthrough]];
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-            const skill_id aSkill = Skill::random_skill();
-            const int level = get_skill_level( aSkill );
+                [[fallthrough]];
+            case 5:
+                if( allow_stats ) {
+                    switch( rng( 1, 4 ) ) {
+                        case 1:
+                            set_str_base( get_str_base() + 1 );
+                            break;
+                        case 2:
+                            set_dex_base( get_dex_base() + 1 );
+                            break;
+                        case 3:
+                            set_int_base( get_int_base() + 1 );
+                            break;
+                        case 4:
+                            set_per_base( get_per_base() + 1 );
+                            break;
+                    }
+                    break;
+                }
+                [[fallthrough]];
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+                const skill_id aSkill = Skill::random_skill();
+                const int level = get_skill_level( aSkill );
 
-            if( level < p.skill_points_left && level < MAX_SKILL && loops > 10000 ) {
-                // For balance reasons, increasing a skill from level 0 gives you 1 extra level for free
-                set_skill_level( aSkill, ( level == 0 ? 2 : level + 1 ) );
-            }
-            break;
+                if( level < p.skill_points_left && level < MAX_SKILL && loops > 10000 ) {
+                    // For balance reasons, increasing a skill from level 0 gives you 1 extra level for free
+                    set_skill_level( aSkill, ( level == 0 ? 2 : level + 1 ) );
+                }
+                break;
         }
     }
 
@@ -778,42 +778,42 @@ bool avatar::create( character_type type, const std::string &tempname )
     pool_type pool = pool_type::FREEFORM;
 
     switch( type ) {
-    case character_type::CUSTOM:
-        if( !get_option<std::string>( "DEF_CHAR_NAME" ).empty() ) {
-            name = get_option<std::string>( "DEF_CHAR_NAME" );
-        }
-        randomize_cosmetics();
-        break;
-    case character_type::RANDOM:
-        //random scenario, default name if exist
-        randomize( true );
-        //tabs.position.last();
-        break;
-    case character_type::NOW:
-        //default world, fixed scenario, random name
-        randomize( false, true );
-        break;
-    case character_type::FULL_RANDOM:
-        //default world, random scenario, random name
-        randomize( true, true );
-        break;
-    case character_type::TEMPLATE:
-        if( !load_template( tempname, /*out*/ pool ) ) {
-            return false;
-        }
+        case character_type::CUSTOM:
+            if( !get_option<std::string>( "DEF_CHAR_NAME" ).empty() ) {
+                name = get_option<std::string>( "DEF_CHAR_NAME" );
+            }
+            randomize_cosmetics();
+            break;
+        case character_type::RANDOM:
+            //random scenario, default name if exist
+            randomize( true );
+            //tabs.position.last();
+            break;
+        case character_type::NOW:
+            //default world, fixed scenario, random name
+            randomize( false, true );
+            break;
+        case character_type::FULL_RANDOM:
+            //default world, random scenario, random name
+            randomize( true, true );
+            break;
+        case character_type::TEMPLATE:
+            if( !load_template( tempname, /*out*/ pool ) ) {
+                return false;
+            }
 
-        // We want to prevent recipes known by the template from being applied to the
-        // new character. The recipe list will be rebuilt when entering the game.
-        // Except if it is a character transfer template
-        if( pool != pool_type::TRANSFER ) {
-            forget_all_recipes();
-        }
-        //tabs.position.last();
-        break;
+            // We want to prevent recipes known by the template from being applied to the
+            // new character. The recipe list will be rebuilt when entering the game.
+            // Except if it is a character transfer template
+            if( pool != pool_type::TRANSFER ) {
+                forget_all_recipes();
+            }
+            //tabs.position.last();
+            break;
     }
     // Don't apply the default backgrounds on a template or scenario with SKIP_DEFAULT_BACKGROUND
     if( type != character_type::TEMPLATE &&
-            !get_scenario()->has_flag( flag_SKIP_DEFAULT_BACKGROUND ) ) {
+        !get_scenario()->has_flag( flag_SKIP_DEFAULT_BACKGROUND ) ) {
         add_default_background();
     }
 
@@ -942,7 +942,7 @@ void Character::initialize( bool learn_recipes )
         for( const auto &e : recipe_dict ) {
             const recipe &r = e.second;
             if( !r.is_practice() && !r.has_flag( flag_SECRET ) && !knows_recipe( &r ) &&
-                    has_recipe_requirements( r ) ) {
+                has_recipe_requirements( r ) ) {
                 learn_recipe( &r );
             }
         }
@@ -1248,139 +1248,139 @@ void draw_stat_details( avatar &u )
     std::string description_str;
     character_stat selected_stat = static_cast<character_stat>( cc_uistate.selected_stat_index );
     switch( selected_stat ) {
-    case character_stat::STRENGTH: {
-        u.recalc_hp();
-        u.set_stored_kcal( u.get_healthy_kcal() );
-        description_str =
-            string_format( _( "Base HP: %d" ), u.get_part_hp_max( bodypart_id( "head" ) ) )
-            + string_format( _( "\nCarry weight: %.1f %s" ), convert_weight( u.weight_capacity() ),
-                             weight_units() )
-            + string_format( _( "\nResistance to knock down effect when hit: %.1f" ), u.stability_roll() )
-            + string_format( _( "\nIntimidation skill: %i" ), u.intimidation() )
-            + string_format( _( "\nMaximum oxygen: %i" ), u.get_oxygen_max() )
-            + string_format( _( "\nShout volume: %i" ), u.get_shout_volume() )
-            + string_format( _( "\nLifting strength: %i" ), u.get_lift_str() )
-            + string_format( _( "\nMove cost while swimming: %i" ), u.swim_speed() )
-            + colorize(
-                string_format( _( "\nBash damage bonus: %.1f" ), u.bonus_damage( false ) ),
-                COL_STAT_BONUS )
-            + _( "\n\nAffects:" )
-            + colorize(
-                _( "\n- Throwing range, accuracy, and damage"
-                   "\n- Reload speed for weapons using muscle power to reload"
-                   "\n- Pull strength of some mutations"
-                   "\n- Resistance for being pulled or grabbed by some monsters"
-                   "\n- Speed of corpses pulping"
-                   "\n- Speed and effectiveness of prying things open, chopping wood, and mining"
-                   "\n- Chance of escaping grabs and traps"
-                   "\n- Power produced by muscle-powered vehicles"
-                   "\n- Most aspects of melee combat"
-                   "\n- Effectiveness of smashing furniture or terrain"
-                   "\n- Resistance to many diseases and poisons"
-                   "\n- Ability to drag heavy objects and grants bonus to speed when dragging them"
-                   "\n- Ability to wield heavy weapons with one hand"
-                   "\n- Ability to manage gun recoil"
-                   "\n- Duration of action of various drugs and alcohol" ),
-                c_green );
-    }
-    break;
-
-    case character_stat::DEXTERITY: {
-        description_str =
-            colorize(
-                string_format( _( "Melee to-hit bonus: %+.2f" ), u.get_melee_hit_base() ),
-                u.get_melee_hit_base() >= 0 ? COL_STAT_BONUS : COL_STAT_PENALTY );
-        description_str += colorize(
-                               string_format( _( "\nThrowing penalty per target's dodge: +%d" ),
-                                              u.throw_dispersion_per_dodge( false ) ), COL_STAT_PENALTY );
-        if( u.ranged_dex_mod() != 0 ) {
-            description_str += colorize( string_format( _( "\nRanged penalty: -%d" ),
-                                         std::abs( u.ranged_dex_mod() ) ), COL_STAT_PENALTY );
-        } else {
-            description_str += "\n";
-        }
-        description_str +=
-            string_format( _( "\nDodge skill: %.f" ), u.get_dodge() )
-            + string_format( _( "\nMove cost while swimming: %i" ), u.swim_speed() )
-            + _( "\n\nAffects:" )
-            + colorize(
-                _( "\n- Effectiveness of lockpicking"
-                   "\n- Resistance for being grabbed by some monsters"
-                   "\n- Chance of escaping grabs and traps"
-                   "\n- Effectiveness of disarming traps"
-                   "\n- Chance of success when manipulating with gun modifications"
-                   "\n- Effectiveness of repairing and modifying clothes and armor"
-                   "\n- Attack speed and chance of critical hits in melee combat"
-                   "\n- Effectiveness of stealing"
-                   "\n- Throwing speed"
-                   "\n- Aiming speed"
-                   "\n- Speed and effectiveness of chopping wood with powered tools"
-                   "\n- Chance to avoid traps"
-                   "\n- Chance to get better results when butchering corpses or cutting items"
-                   "\n- Chance of avoiding cuts on sharp terrain"
-                   "\n- Chance of losing control of vehicle when driving"
-                   "\n- Chance of damaging melee weapon on attack"
-                   "\n- Damage from falling" ),
-                c_green );
-    }
-    break;
-
-    case character_stat::INTELLIGENCE: {
-        const int read_spd = u.read_speed();
-        description_str =
-            colorize( string_format( _( "Read times: %d%%" ), read_spd ),
-                      ( read_spd == 100 ? COL_STAT_NEUTRAL :
-                        ( read_spd < 100 ? COL_STAT_BONUS : COL_STAT_PENALTY ) ) )
-            + string_format( _( "\nPersuade/lie skill: %i" ), u.persuade_skill() )
-            + colorize( string_format( _( "\nCrafting bonus: %2d%%" ), u.get_int() ),
-                        COL_STAT_BONUS )
-            + _( "\n\nAffects:" )
-            + colorize(
-                _( "\n- Speed of 'catching up' practical experience to theoretical knowledge"
-                   "\n- Detection and disarming traps"
-                   "\n- Chance of success when installing bionics"
-                   "\n- Chance of success when manipulating with gun modifications"
-                   "\n- Chance to learn a recipe when crafting from a book"
-                   "\n- Chance to learn martial arts techniques when using CQB bionic"
-                   "\n- Chance of hacking computers and card readers"
-                   "\n- Chance of successful robot reprogramming"
-                   "\n- Chance of successful decrypting memory cards"
-                   "\n- Chance of bypassing vehicle security system"
-                   "\n- Chance to get better results when disassembling items"
-                   "\n- Chance of being paralyzed by fear attack" ),
-                c_green );
-    }
-    break;
-
-    case character_stat::PERCEPTION: {
-        if( u.ranged_per_mod() > 0 ) {
+        case character_stat::STRENGTH: {
+            u.recalc_hp();
+            u.set_stored_kcal( u.get_healthy_kcal() );
             description_str =
-                colorize( string_format( _( "Aiming penalty: -%d" ), u.ranged_per_mod() ),
-                          COL_STAT_PENALTY );
+                string_format( _( "Base HP: %d" ), u.get_part_hp_max( bodypart_id( "head" ) ) )
+                + string_format( _( "\nCarry weight: %.1f %s" ), convert_weight( u.weight_capacity() ),
+                                 weight_units() )
+                + string_format( _( "\nResistance to knock down effect when hit: %.1f" ), u.stability_roll() )
+                + string_format( _( "\nIntimidation skill: %i" ), u.intimidation() )
+                + string_format( _( "\nMaximum oxygen: %i" ), u.get_oxygen_max() )
+                + string_format( _( "\nShout volume: %i" ), u.get_shout_volume() )
+                + string_format( _( "\nLifting strength: %i" ), u.get_lift_str() )
+                + string_format( _( "\nMove cost while swimming: %i" ), u.swim_speed() )
+                + colorize(
+                    string_format( _( "\nBash damage bonus: %.1f" ), u.bonus_damage( false ) ),
+                    COL_STAT_BONUS )
+                + _( "\n\nAffects:" )
+                + colorize(
+                    _( "\n- Throwing range, accuracy, and damage"
+                       "\n- Reload speed for weapons using muscle power to reload"
+                       "\n- Pull strength of some mutations"
+                       "\n- Resistance for being pulled or grabbed by some monsters"
+                       "\n- Speed of corpses pulping"
+                       "\n- Speed and effectiveness of prying things open, chopping wood, and mining"
+                       "\n- Chance of escaping grabs and traps"
+                       "\n- Power produced by muscle-powered vehicles"
+                       "\n- Most aspects of melee combat"
+                       "\n- Effectiveness of smashing furniture or terrain"
+                       "\n- Resistance to many diseases and poisons"
+                       "\n- Ability to drag heavy objects and grants bonus to speed when dragging them"
+                       "\n- Ability to wield heavy weapons with one hand"
+                       "\n- Ability to manage gun recoil"
+                       "\n- Duration of action of various drugs and alcohol" ),
+                    c_green );
         }
-        description_str +=
-            string_format( _( "\nPersuade/lie skill: %i" ), u.persuade_skill() )
-            + _( "\n\nAffects:" )
-            + colorize(
-                _( "\n- Speed of 'catching up' practical experience to theoretical knowledge"
-                   "\n- Time needed for safe cracking"
-                   "\n- Sight distance on game map and overmap"
-                   "\n- Effectiveness of stealing"
-                   "\n- Throwing accuracy"
-                   "\n- Chance of losing control of vehicle when driving"
-                   "\n- Chance of spotting camouflaged creatures"
-                   "\n- Effectiveness of lockpicking"
-                   "\n- Effectiveness of foraging"
-                   "\n- Precision when examining wounds and using first aid skill"
-                   "\n- Detection and disarming traps"
-                   "\n- Morale bonus when playing a musical instrument"
-                   "\n- Effectiveness of repairing and modifying clothes and armor"
-                   "\n- Chance of critical hits in melee combat" ),
-                c_green );
-    }
-    break;
-    default:
         break;
+
+        case character_stat::DEXTERITY: {
+            description_str =
+                colorize(
+                    string_format( _( "Melee to-hit bonus: %+.2f" ), u.get_melee_hit_base() ),
+                    u.get_melee_hit_base() >= 0 ? COL_STAT_BONUS : COL_STAT_PENALTY );
+            description_str += colorize(
+                                   string_format( _( "\nThrowing penalty per target's dodge: +%d" ),
+                                                  u.throw_dispersion_per_dodge( false ) ), COL_STAT_PENALTY );
+            if( u.ranged_dex_mod() != 0 ) {
+                description_str += colorize( string_format( _( "\nRanged penalty: -%d" ),
+                                             std::abs( u.ranged_dex_mod() ) ), COL_STAT_PENALTY );
+            } else {
+                description_str += "\n";
+            }
+            description_str +=
+                string_format( _( "\nDodge skill: %.f" ), u.get_dodge() )
+                + string_format( _( "\nMove cost while swimming: %i" ), u.swim_speed() )
+                + _( "\n\nAffects:" )
+                + colorize(
+                    _( "\n- Effectiveness of lockpicking"
+                       "\n- Resistance for being grabbed by some monsters"
+                       "\n- Chance of escaping grabs and traps"
+                       "\n- Effectiveness of disarming traps"
+                       "\n- Chance of success when manipulating with gun modifications"
+                       "\n- Effectiveness of repairing and modifying clothes and armor"
+                       "\n- Attack speed and chance of critical hits in melee combat"
+                       "\n- Effectiveness of stealing"
+                       "\n- Throwing speed"
+                       "\n- Aiming speed"
+                       "\n- Speed and effectiveness of chopping wood with powered tools"
+                       "\n- Chance to avoid traps"
+                       "\n- Chance to get better results when butchering corpses or cutting items"
+                       "\n- Chance of avoiding cuts on sharp terrain"
+                       "\n- Chance of losing control of vehicle when driving"
+                       "\n- Chance of damaging melee weapon on attack"
+                       "\n- Damage from falling" ),
+                    c_green );
+        }
+        break;
+
+        case character_stat::INTELLIGENCE: {
+            const int read_spd = u.read_speed();
+            description_str =
+                colorize( string_format( _( "Read times: %d%%" ), read_spd ),
+                          ( read_spd == 100 ? COL_STAT_NEUTRAL :
+                            ( read_spd < 100 ? COL_STAT_BONUS : COL_STAT_PENALTY ) ) )
+                + string_format( _( "\nPersuade/lie skill: %i" ), u.persuade_skill() )
+                + colorize( string_format( _( "\nCrafting bonus: %2d%%" ), u.get_int() ),
+                            COL_STAT_BONUS )
+                + _( "\n\nAffects:" )
+                + colorize(
+                    _( "\n- Speed of 'catching up' practical experience to theoretical knowledge"
+                       "\n- Detection and disarming traps"
+                       "\n- Chance of success when installing bionics"
+                       "\n- Chance of success when manipulating with gun modifications"
+                       "\n- Chance to learn a recipe when crafting from a book"
+                       "\n- Chance to learn martial arts techniques when using CQB bionic"
+                       "\n- Chance of hacking computers and card readers"
+                       "\n- Chance of successful robot reprogramming"
+                       "\n- Chance of successful decrypting memory cards"
+                       "\n- Chance of bypassing vehicle security system"
+                       "\n- Chance to get better results when disassembling items"
+                       "\n- Chance of being paralyzed by fear attack" ),
+                    c_green );
+        }
+        break;
+
+        case character_stat::PERCEPTION: {
+            if( u.ranged_per_mod() > 0 ) {
+                description_str =
+                    colorize( string_format( _( "Aiming penalty: -%d" ), u.ranged_per_mod() ),
+                              COL_STAT_PENALTY );
+            }
+            description_str +=
+                string_format( _( "\nPersuade/lie skill: %i" ), u.persuade_skill() )
+                + _( "\n\nAffects:" )
+                + colorize(
+                    _( "\n- Speed of 'catching up' practical experience to theoretical knowledge"
+                       "\n- Time needed for safe cracking"
+                       "\n- Sight distance on game map and overmap"
+                       "\n- Effectiveness of stealing"
+                       "\n- Throwing accuracy"
+                       "\n- Chance of losing control of vehicle when driving"
+                       "\n- Chance of spotting camouflaged creatures"
+                       "\n- Effectiveness of lockpicking"
+                       "\n- Effectiveness of foraging"
+                       "\n- Precision when examining wounds and using first aid skill"
+                       "\n- Detection and disarming traps"
+                       "\n- Morale bonus when playing a musical instrument"
+                       "\n- Effectiveness of repairing and modifying clothes and armor"
+                       "\n- Chance of critical hits in melee combat" ),
+                    c_green );
+        }
+        break;
+        default:
+            break;
     }
     cataimgui::draw_colored_text( description_str, ImGui::GetContentRegionAvail().x );
 }
@@ -1833,8 +1833,8 @@ void draw_skill_details( const avatar &u,
             with_prof_skills.meets_skill_requirements( r.autolearn_requirements );
 
         if( !would_autolearn_recipe && !r.never_learn &&
-                ( r.skill_used == currentSkill || skill > 0 ) &&
-                with_prof_skills.has_recipe_requirements( r ) ) {
+            ( r.skill_used == currentSkill || skill > 0 ) &&
+            with_prof_skills.has_recipe_requirements( r ) ) {
 
             recipes[r.skill_used->name()].emplace_back( r.result_name( /*decorated=*/true ),
                     ( skill > 0 ) ? skill : r.difficulty );
@@ -1884,7 +1884,7 @@ void draw_scenario_details( const avatar &u )
     const std::optional<achievement_id> scenRequirement = current_scenario->get_requirement();
 
     if( scenRequirement.has_value() ||
-            ( current_scenario->has_flag( "CITY_START" ) && !cities_enabled() ) ) {
+        ( current_scenario->has_flag( "CITY_START" ) && !cities_enabled() ) ) {
         draw_colored_text_wrap( _( "Scenario Requirements:" ), COL_HEADER );
         if( current_scenario->has_flag( "CITY_START" ) && !cities_enabled() ) {
             draw_colored_text_wrap(
@@ -2508,121 +2508,121 @@ void character_creator_ui::setup_new_uilist()
         }
 
         switch( cc_uistate.selected_tab ) {
-        case CHARCREATOR_STATS: {
-            new_uilist->filtering = false;
-            break;
-        }
-        case CHARCREATOR_TRAITS: {
-            cc_uistate.recalc_trait_list( u );
-            std::vector<trait_id> &sorted_traits = cc_uistate.sorted_traits;
-            new_uilist->set_category_filter( [&]( const uilist_entry & entry,
-            const std::string & key )->bool {
-                const trait_id entry_trait = sorted_traits[entry.retval];
-                if( entry_trait.is_valid() )
-                {
-                    if( key == CHARACTER_CREATOR_UILIST_ALL.translated() ) {
-                        return true;
-                    }
-                    if( key == CHARACTER_CREATOR_TRAITS_POSITIVE.translated() && entry_trait->points > 0 ) {
-                        return true;
-                    }
-                    if( key == CHARACTER_CREATOR_TRAITS_NEGATIVE.translated() && entry_trait->points < 0 ) {
-                        return true;
-                    }
-                    if( key == CHARACTER_CREATOR_TRAITS_NEUTRAL.translated() && entry_trait->points == 0 &&
-                            !entry_trait->vanity ) {
-                        return true;
-                    }
-                    if( key == CHARACTER_CREATOR_TRAITS_COSMETIC.translated() && entry_trait->vanity ) {
-                        return true;
-                    }
-                }
-                return false;
-            } );
-
-            new_uilist->add_category( CHARACTER_CREATOR_UILIST_ALL.translated(),
-                                      CHARACTER_CREATOR_UILIST_ALL.translated() );
-            new_uilist->add_category( CHARACTER_CREATOR_TRAITS_POSITIVE.translated(),
-                                      CHARACTER_CREATOR_TRAITS_POSITIVE.translated() );
-            new_uilist->add_category( CHARACTER_CREATOR_TRAITS_NEGATIVE.translated(),
-                                      CHARACTER_CREATOR_TRAITS_NEGATIVE.translated() );
-            new_uilist->add_category( CHARACTER_CREATOR_TRAITS_NEUTRAL.translated(),
-                                      CHARACTER_CREATOR_TRAITS_NEUTRAL.translated() );
-            new_uilist->add_category( CHARACTER_CREATOR_TRAITS_COSMETIC.translated(),
-                                      CHARACTER_CREATOR_TRAITS_COSMETIC.translated() );
-            break;
-        }
-        case CHARCREATOR_SKILLS: {
-
-            new_uilist->add_category( CHARACTER_CREATOR_UILIST_ALL.translated(),
-                                      CHARACTER_CREATOR_UILIST_ALL.translated() );
-            for( const SkillDisplayType &skill_category : SkillDisplayType::skillTypes ) {
-                const std::string category_key = skill_category.display_string();
-                const std::string first_word = string_split( category_key, ' ' ).front();
-                new_uilist->add_category( category_key, to_upper_case( first_word ) );
+            case CHARCREATOR_STATS: {
+                new_uilist->filtering = false;
+                break;
             }
+            case CHARCREATOR_TRAITS: {
+                cc_uistate.recalc_trait_list( u );
+                std::vector<trait_id> &sorted_traits = cc_uistate.sorted_traits;
+                new_uilist->set_category_filter( [&]( const uilist_entry & entry,
+                const std::string & key )->bool {
+                    const trait_id entry_trait = sorted_traits[entry.retval];
+                    if( entry_trait.is_valid() )
+                    {
+                        if( key == CHARACTER_CREATOR_UILIST_ALL.translated() ) {
+                            return true;
+                        }
+                        if( key == CHARACTER_CREATOR_TRAITS_POSITIVE.translated() && entry_trait->points > 0 ) {
+                            return true;
+                        }
+                        if( key == CHARACTER_CREATOR_TRAITS_NEGATIVE.translated() && entry_trait->points < 0 ) {
+                            return true;
+                        }
+                        if( key == CHARACTER_CREATOR_TRAITS_NEUTRAL.translated() && entry_trait->points == 0 &&
+                            !entry_trait->vanity ) {
+                            return true;
+                        }
+                        if( key == CHARACTER_CREATOR_TRAITS_COSMETIC.translated() && entry_trait->vanity ) {
+                            return true;
+                        }
+                    }
+                    return false;
+                } );
 
-            cc_uistate.recalc_skill_list();
+                new_uilist->add_category( CHARACTER_CREATOR_UILIST_ALL.translated(),
+                                          CHARACTER_CREATOR_UILIST_ALL.translated() );
+                new_uilist->add_category( CHARACTER_CREATOR_TRAITS_POSITIVE.translated(),
+                                          CHARACTER_CREATOR_TRAITS_POSITIVE.translated() );
+                new_uilist->add_category( CHARACTER_CREATOR_TRAITS_NEGATIVE.translated(),
+                                          CHARACTER_CREATOR_TRAITS_NEGATIVE.translated() );
+                new_uilist->add_category( CHARACTER_CREATOR_TRAITS_NEUTRAL.translated(),
+                                          CHARACTER_CREATOR_TRAITS_NEUTRAL.translated() );
+                new_uilist->add_category( CHARACTER_CREATOR_TRAITS_COSMETIC.translated(),
+                                          CHARACTER_CREATOR_TRAITS_COSMETIC.translated() );
+                break;
+            }
+            case CHARCREATOR_SKILLS: {
 
-            new_uilist->set_category_filter( [&]( const uilist_entry & entry,
-            const std::string & key )->bool {
-                if( key == CHARACTER_CREATOR_UILIST_ALL.translated() )
-                {
-                    return true;
+                new_uilist->add_category( CHARACTER_CREATOR_UILIST_ALL.translated(),
+                                          CHARACTER_CREATOR_UILIST_ALL.translated() );
+                for( const SkillDisplayType &skill_category : SkillDisplayType::skillTypes ) {
+                    const std::string category_key = skill_category.display_string();
+                    const std::string first_word = string_split( category_key, ' ' ).front();
+                    new_uilist->add_category( category_key, to_upper_case( first_word ) );
                 }
-                const Skill *entry_skill = cc_uistate.sorted_skills[entry.retval];
-                if( entry_skill )
-                {
-                    return key == entry_skill->display_category()->display_string();
-                }
-                return false;
-            } );
-            break;
-        }
-        case CHARCREATOR_SCENARIO: {
-            cc_uistate.recalc_scenario_list( u );
-            std::vector<const scenario *> &sorted_scenarios = cc_uistate.sorted_scenarios;
 
-            new_uilist->set_category_filter( [&]( const uilist_entry & entry,
-            const std::string & key )->bool {
-                const scenario *entry_scenario = sorted_scenarios[entry.retval];
-                if( key == CHARACTER_CREATOR_UILIST_ALL.translated() )
-                {
-                    return true;
-                }
-                if( key == CHARACTER_CREATOR_SCENARIOS_FORGIVING.translated() && entry_scenario->has_flag( flag_FORGIVING ) )
-                {
-                    return true;
-                }
-                if( key == CHARACTER_CREATOR_SCENARIOS_STANDARD.translated() && entry_scenario->has_flag( flag_STANDARD ) )
-                {
-                    return true;
-                }
-                if( key == CHARACTER_CREATOR_SCENARIOS_TOUGH.translated() && entry_scenario->has_flag( flag_TOUGH ) )
-                {
-                    return true;
-                }
-                if( key == CHARACTER_CREATOR_SCENARIOS_CHALLENGE.translated() && entry_scenario->has_flag( flag_CHALLENGE ) )
-                {
-                    return true;
-                }
-                return false;
-            } );
+                cc_uistate.recalc_skill_list();
 
-            new_uilist->add_category( CHARACTER_CREATOR_UILIST_ALL.translated(),
-                                      CHARACTER_CREATOR_UILIST_ALL.translated() );
-            new_uilist->add_category( CHARACTER_CREATOR_SCENARIOS_FORGIVING.translated(),
-                                      CHARACTER_CREATOR_SCENARIOS_FORGIVING.translated() );
-            new_uilist->add_category( CHARACTER_CREATOR_SCENARIOS_STANDARD.translated(),
-                                      CHARACTER_CREATOR_SCENARIOS_STANDARD.translated() );
-            new_uilist->add_category( CHARACTER_CREATOR_SCENARIOS_TOUGH.translated(),
-                                      CHARACTER_CREATOR_SCENARIOS_TOUGH.translated() );
-            new_uilist->add_category( CHARACTER_CREATOR_SCENARIOS_CHALLENGE.translated(),
-                                      CHARACTER_CREATOR_SCENARIOS_CHALLENGE.translated() );
-        }
-        default:
-            // do nothing; doesn't use a uilist
-            break;
+                new_uilist->set_category_filter( [&]( const uilist_entry & entry,
+                const std::string & key )->bool {
+                    if( key == CHARACTER_CREATOR_UILIST_ALL.translated() )
+                    {
+                        return true;
+                    }
+                    const Skill *entry_skill = cc_uistate.sorted_skills[entry.retval];
+                    if( entry_skill )
+                    {
+                        return key == entry_skill->display_category()->display_string();
+                    }
+                    return false;
+                } );
+                break;
+            }
+            case CHARCREATOR_SCENARIO: {
+                cc_uistate.recalc_scenario_list( u );
+                std::vector<const scenario *> &sorted_scenarios = cc_uistate.sorted_scenarios;
+
+                new_uilist->set_category_filter( [&]( const uilist_entry & entry,
+                const std::string & key )->bool {
+                    const scenario *entry_scenario = sorted_scenarios[entry.retval];
+                    if( key == CHARACTER_CREATOR_UILIST_ALL.translated() )
+                    {
+                        return true;
+                    }
+                    if( key == CHARACTER_CREATOR_SCENARIOS_FORGIVING.translated() && entry_scenario->has_flag( flag_FORGIVING ) )
+                    {
+                        return true;
+                    }
+                    if( key == CHARACTER_CREATOR_SCENARIOS_STANDARD.translated() && entry_scenario->has_flag( flag_STANDARD ) )
+                    {
+                        return true;
+                    }
+                    if( key == CHARACTER_CREATOR_SCENARIOS_TOUGH.translated() && entry_scenario->has_flag( flag_TOUGH ) )
+                    {
+                        return true;
+                    }
+                    if( key == CHARACTER_CREATOR_SCENARIOS_CHALLENGE.translated() && entry_scenario->has_flag( flag_CHALLENGE ) )
+                    {
+                        return true;
+                    }
+                    return false;
+                } );
+
+                new_uilist->add_category( CHARACTER_CREATOR_UILIST_ALL.translated(),
+                                          CHARACTER_CREATOR_UILIST_ALL.translated() );
+                new_uilist->add_category( CHARACTER_CREATOR_SCENARIOS_FORGIVING.translated(),
+                                          CHARACTER_CREATOR_SCENARIOS_FORGIVING.translated() );
+                new_uilist->add_category( CHARACTER_CREATOR_SCENARIOS_STANDARD.translated(),
+                                          CHARACTER_CREATOR_SCENARIOS_STANDARD.translated() );
+                new_uilist->add_category( CHARACTER_CREATOR_SCENARIOS_TOUGH.translated(),
+                                          CHARACTER_CREATOR_SCENARIOS_TOUGH.translated() );
+                new_uilist->add_category( CHARACTER_CREATOR_SCENARIOS_CHALLENGE.translated(),
+                                          CHARACTER_CREATOR_SCENARIOS_CHALLENGE.translated() );
+            }
+            default:
+                // do nothing; doesn't use a uilist
+                break;
         }
         //add inputs from uilist to input_context
         if( new_uilist ) {
@@ -2643,89 +2643,91 @@ void character_creator_ui::update_uilist_entries()
     }
 
     switch( cc_uistate.selected_tab ) {
-    case CHARCREATOR_SCENARIO: {
-        cc_uistate.recalc_scenario_list( u );
-        const int scenario_count = cc_uistate.sorted_scenarios.size();
+        case CHARCREATOR_SCENARIO: {
+            cc_uistate.recalc_scenario_list( u );
+            const int scenario_count = cc_uistate.sorted_scenarios.size();
 
-        for( int i = 0; i < scenario_count; i++ ) {
-            const scenario* current_scenario = cc_uistate.sorted_scenarios[i];
-            uilist_entry entry = get_uilist_entry( current_scenario->gender_appropriate_name( u.male ) );
-            entry.retval = i;
-            entry.text_color = current_scenario == cc_uistate.get_selected_scenario() ? COL_SELECTED : COL_NOT_SELECTED;
-            entry.enabled = current_scenario->can_pick().success();
-            menu->addentry( entry );
+            for( int i = 0; i < scenario_count; i++ ) {
+                const scenario *current_scenario = cc_uistate.sorted_scenarios[i];
+                uilist_entry entry = get_uilist_entry( current_scenario->gender_appropriate_name( u.male ) );
+                entry.retval = i;
+                entry.text_color = current_scenario == cc_uistate.get_selected_scenario() ? COL_SELECTED :
+                                   COL_NOT_SELECTED;
+                entry.enabled = current_scenario->can_pick().success();
+                menu->addentry( entry );
+            }
+            break;
         }
-        break;
-    }
-    case CHARCREATOR_PROFESSION: {
-        cc_uistate.recalc_profession_list( u );
-        const int profession_count = cc_uistate.sorted_professions.size();
+        case CHARCREATOR_PROFESSION: {
+            cc_uistate.recalc_profession_list( u );
+            const int profession_count = cc_uistate.sorted_professions.size();
 
-        for( int i = 0; i < profession_count; i++ ) {
-            const profession_id current_profession = cc_uistate.sorted_professions[i];
-            uilist_entry entry = get_uilist_entry( current_profession->gender_appropriate_name( u.male ) );
-            entry.retval = i;
-            entry.text_color = current_profession == cc_uistate.get_selected_profession() ? COL_SELECTED : COL_NOT_SELECTED;
-            entry.enabled = current_profession->can_pick().success();
-            menu->addentry( entry );
+            for( int i = 0; i < profession_count; i++ ) {
+                const profession_id current_profession = cc_uistate.sorted_professions[i];
+                uilist_entry entry = get_uilist_entry( current_profession->gender_appropriate_name( u.male ) );
+                entry.retval = i;
+                entry.text_color = current_profession == cc_uistate.get_selected_profession() ? COL_SELECTED :
+                                   COL_NOT_SELECTED;
+                entry.enabled = current_profession->can_pick().success();
+                menu->addentry( entry );
+            }
+            break;
         }
-        break;
-    }
-    case CHARCREATOR_BACKGROUND: {
-        cc_uistate.recalc_hobby_list( u );
-        const int hobby_count = cc_uistate.sorted_hobbies.size();
+        case CHARCREATOR_BACKGROUND: {
+            cc_uistate.recalc_hobby_list( u );
+            const int hobby_count = cc_uistate.sorted_hobbies.size();
 
-        for( int i = 0; i < hobby_count; i++ ) {
-            const profession_id current_hobby = cc_uistate.sorted_hobbies[i];
-            uilist_entry entry = get_uilist_entry( current_hobby->gender_appropriate_name( u.male ) );
-            entry.retval = i;
-            entry.text_color = u.hobbies.count( &*current_hobby ) ? COL_SELECTED : COL_NOT_SELECTED;
-            entry.enabled = current_hobby->can_pick().success();
-            menu->addentry( entry );
+            for( int i = 0; i < hobby_count; i++ ) {
+                const profession_id current_hobby = cc_uistate.sorted_hobbies[i];
+                uilist_entry entry = get_uilist_entry( current_hobby->gender_appropriate_name( u.male ) );
+                entry.retval = i;
+                entry.text_color = u.hobbies.count( &*current_hobby ) ? COL_SELECTED : COL_NOT_SELECTED;
+                entry.enabled = current_hobby->can_pick().success();
+                menu->addentry( entry );
+            }
+            break;
         }
-        break;
-    }
-    case CHARCREATOR_STATS: {
-        cc_uistate.stats[static_cast<int>( character_stat::STRENGTH )] = u.get_str_base();
-        cc_uistate.stats[static_cast<int>( character_stat::PERCEPTION )] = u.get_per_base();
-        cc_uistate.stats[static_cast<int>( character_stat::INTELLIGENCE )] = u.get_int_base();
-        cc_uistate.stats[static_cast<int>( character_stat::DEXTERITY )] = u.get_dex_base();
+        case CHARCREATOR_STATS: {
+            cc_uistate.stats[static_cast<int>( character_stat::STRENGTH )] = u.get_str_base();
+            cc_uistate.stats[static_cast<int>( character_stat::PERCEPTION )] = u.get_per_base();
+            cc_uistate.stats[static_cast<int>( character_stat::INTELLIGENCE )] = u.get_int_base();
+            cc_uistate.stats[static_cast<int>( character_stat::DEXTERITY )] = u.get_dex_base();
 
-        const int stat_count = static_cast<int>( character_stat::DUMMY_STAT );
-        for( int i = 0; i < stat_count; i++ ) {
-            uilist_entry entry = get_uilist_entry( char_creation::get_character_stat_header( i ) );
-            menu->addentry( get_uilist_entry( char_creation::get_character_stat_header( i ) ) );
+            const int stat_count = static_cast<int>( character_stat::DUMMY_STAT );
+            for( int i = 0; i < stat_count; i++ ) {
+                uilist_entry entry = get_uilist_entry( char_creation::get_character_stat_header( i ) );
+                menu->addentry( get_uilist_entry( char_creation::get_character_stat_header( i ) ) );
+            }
+            break;
         }
-        break;
-    }
-    case CHARCREATOR_TRAITS: {
-        cc_uistate.recalc_trait_list( u );
-        const int trait_count = cc_uistate.sorted_traits.size();
-        for( int i = 0; i < trait_count; i++ ) {
-            trait_id current_trait = cc_uistate.sorted_traits[i];
-            uilist_entry entry = get_uilist_entry( current_trait->name() );
-            entry.retval = i;
-            entry.text_color = u.has_trait( current_trait ) ? COL_SELECTED : COL_NOT_SELECTED;
-            entry.enabled = !( u.has_conflicting_trait( current_trait ) ||
-                               get_scenario()->is_forbidden_trait( current_trait ) ||
-                               u.prof->is_forbidden_trait( current_trait ) );
-            menu->addentry( entry );
+        case CHARCREATOR_TRAITS: {
+            cc_uistate.recalc_trait_list( u );
+            const int trait_count = cc_uistate.sorted_traits.size();
+            for( int i = 0; i < trait_count; i++ ) {
+                trait_id current_trait = cc_uistate.sorted_traits[i];
+                uilist_entry entry = get_uilist_entry( current_trait->name() );
+                entry.retval = i;
+                entry.text_color = u.has_trait( current_trait ) ? COL_SELECTED : COL_NOT_SELECTED;
+                entry.enabled = !( u.has_conflicting_trait( current_trait ) ||
+                                   get_scenario()->is_forbidden_trait( current_trait ) ||
+                                   u.prof->is_forbidden_trait( current_trait ) );
+                menu->addentry( entry );
+            }
+            break;
         }
-        break;
-    }
-    case CHARCREATOR_SKILLS: {
-        cc_uistate.recalc_skill_list();
-        const int skill_count = cc_uistate.sorted_skills.size();
-        for( int i = 0; i < skill_count; i++ ) {
-            uilist_entry skill_entry = get_uilist_entry( get_skill_entry_text(
-                                           cc_uistate.sorted_skills[i]->ident(), u ) );
-            skill_entry.retval = i;
-            menu->addentry( skill_entry );
+        case CHARCREATOR_SKILLS: {
+            cc_uistate.recalc_skill_list();
+            const int skill_count = cc_uistate.sorted_skills.size();
+            for( int i = 0; i < skill_count; i++ ) {
+                uilist_entry skill_entry = get_uilist_entry( get_skill_entry_text(
+                                               cc_uistate.sorted_skills[i]->ident(), u ) );
+                skill_entry.retval = i;
+                menu->addentry( skill_entry );
+            }
+            break;
         }
-        break;
-    }
-    default:
-        break;
+        default:
+            break;
     }
     if( menu ) {
         menu->desired_bounds = uilist_reset_desired_bounds();
@@ -2739,17 +2741,17 @@ void character_creator_ui::setup_avatar()
     avatar &u = get_avatar();
 
     switch( cc_uistate.selected_tab ) {
-    case CHARCREATOR_STATS:
-        u.reset();
-        u.reset_stats();
-        u.recalc_speed_bonus();
-        u.set_stored_kcal( u.get_healthy_kcal() );
-        // Removes pollution of stats by modifications appearing inside reset_stats().
-        // Is reset_stats() even necessary in this context?
-        u.reset_bonuses();
-        break;
-    default:
-        break;
+        case CHARCREATOR_STATS:
+            u.reset();
+            u.reset_stats();
+            u.recalc_speed_bonus();
+            u.set_stored_kcal( u.get_healthy_kcal() );
+            // Removes pollution of stats by modifications appearing inside reset_stats().
+            // Is reset_stats() even necessary in this context?
+            u.reset_bonuses();
+            break;
+        default:
+            break;
     }
 }
 
@@ -2789,7 +2791,7 @@ void character_creator_ui_impl::draw_controls()
         if( current_uilist ) {
             const ImVec2 cursor_pos = ImGui::GetCursorScreenPos();
             if( current_uilist->desired_bounds->y != cursor_pos.y ||
-                    current_uilist->desired_bounds->w != uilist_reset_desired_bounds().w ) {
+                current_uilist->desired_bounds->w != uilist_reset_desired_bounds().w ) {
                 ui_parent->update_uilist_position( cursor_pos );
             }
         }
@@ -3280,7 +3282,7 @@ void character_creator_uistate::recalc_trait_list( const avatar &u )
 
             // We show all starting traits, even if we can't pick them, to keep the interface consistent.
             if( traits_iter.startingtrait || get_scenario()->traitquery( traits_iter.id ) || is_proftrait ||
-                    is_hobby_locked_trait ) {
+                is_hobby_locked_trait ) {
                 sorted_traits.emplace_back( traits_iter.id );
             }
         }
@@ -3451,7 +3453,7 @@ bool character_creator_ui::handle_action( const std::string &action )
     auto mod_skill = [&you]( int mod_value ) {
         const skill_id selected_skill = cc_uistate.get_selected_skill();
         if( ( you.get_skill_level( selected_skill ) == MIN_SKILL && mod_value < 0 ) ||
-                ( you.get_skill_level( selected_skill ) == MAX_SKILL && mod_value > 0 ) ) {
+            ( you.get_skill_level( selected_skill ) == MAX_SKILL && mod_value > 0 ) ) {
             return;
         }
         you.mod_skill_level( selected_skill, mod_value );
@@ -3613,7 +3615,7 @@ bool character_creator_ui::handle_action( const std::string &action )
             you.blood_rh_factor = true;
         } else {
             if( static_cast<blood_type>( static_cast<int>( you.my_blood_type ) + 1 ) <
-                    blood_type::blood_acid ) {
+                blood_type::blood_acid ) {
                 you.my_blood_type = static_cast<blood_type>( static_cast<int>( you.my_blood_type ) + 1 );
                 you.blood_rh_factor = false;
             } else {
@@ -3656,231 +3658,231 @@ void character_creator_callback::confirm( uilist *menu )
     }
 
     switch( cc_uistate.selected_tab ) {
-    case CHARCREATOR_SCENARIO: {
-        cc_uistate.selected_scenario_index = uilist_returned;
+        case CHARCREATOR_SCENARIO: {
+            cc_uistate.selected_scenario_index = uilist_returned;
 
-        const scenario *selected_scenario = cc_uistate.get_selected_scenario();
-        ret_val<void> can_pick = selected_scenario->can_pick();
+            const scenario *selected_scenario = cc_uistate.get_selected_scenario();
+            ret_val<void> can_pick = selected_scenario->can_pick();
 
-        scenario_sorter sorter{ false, u.male, cities_enabled() };
+            scenario_sorter sorter{ false, u.male, cities_enabled() };
 
-        if( !can_pick.success() ) {
-            popup( can_pick.str() );
-            return;
+            if( !can_pick.success() ) {
+                popup( can_pick.str() );
+                return;
+            }
+
+            if( selected_scenario->has_flag( "CITY_START" ) && !sorter.cities_enabled ) {
+                return;
+            }
+            reset_scenario( u, selected_scenario );
+
+            cc_uistate.recalc_professions = true;
+            cc_uistate.recalc_hobbies = true;
+            cc_uistate.recalc_traits = true;
+            break;
         }
+        case CHARCREATOR_PROFESSION: {
+            cc_uistate.selected_profession_index = uilist_returned;
 
-        if( selected_scenario->has_flag( "CITY_START" ) && !sorter.cities_enabled ) {
-            return;
-        }
-        reset_scenario( u, selected_scenario );
+            const profession_id selected_profession = cc_uistate.get_selected_profession();
+            ret_val<void> can_pick = cc_uistate.get_selected_profession()->can_pick();
 
-        cc_uistate.recalc_professions = true;
-        cc_uistate.recalc_hobbies = true;
-        cc_uistate.recalc_traits = true;
-        break;
-    }
-    case CHARCREATOR_PROFESSION: {
-        cc_uistate.selected_profession_index = uilist_returned;
+            if( !can_pick.success() ) {
+                popup( can_pick.str() );
+                return;
+            }
 
-        const profession_id selected_profession = cc_uistate.get_selected_profession();
-        ret_val<void> can_pick = cc_uistate.get_selected_profession()->can_pick();
+            // Remove traits from the previous profession
+            for( const trait_and_var &old : u.prof->get_locked_traits() ) {
+                u.toggle_trait_deps( old.trait );
+            }
 
-        if( !can_pick.success() ) {
-            popup( can_pick.str() );
-            return;
-        }
+            u.prof = &*selected_profession;
 
-        // Remove traits from the previous profession
-        for( const trait_and_var &old : u.prof->get_locked_traits() ) {
-            u.toggle_trait_deps( old.trait );
-        }
-
-        u.prof = &*selected_profession;
-
-        // Remove pre-selected traits that conflict
-        // with the new profession's traits
-        for( const trait_and_var &new_trait : selected_profession->get_locked_traits() ) {
-            if( u.has_conflicting_trait( new_trait.trait ) ) {
-                for( const trait_id &suspect_trait : u.get_mutations() ) {
-                    if( are_conflicting_traits( new_trait.trait, suspect_trait ) ) {
-                        popup( _( "Your trait %1$s has been removed since it conflicts with the %2$s's %3$s trait." ),
-                               u.mutation_name( suspect_trait ), u.prof->gender_appropriate_name( u.male ), new_trait.name() );
-                        u.toggle_trait_deps( suspect_trait );
+            // Remove pre-selected traits that conflict
+            // with the new profession's traits
+            for( const trait_and_var &new_trait : selected_profession->get_locked_traits() ) {
+                if( u.has_conflicting_trait( new_trait.trait ) ) {
+                    for( const trait_id &suspect_trait : u.get_mutations() ) {
+                        if( are_conflicting_traits( new_trait.trait, suspect_trait ) ) {
+                            popup( _( "Your trait %1$s has been removed since it conflicts with the %2$s's %3$s trait." ),
+                                   u.mutation_name( suspect_trait ), u.prof->gender_appropriate_name( u.male ), new_trait.name() );
+                            u.toggle_trait_deps( suspect_trait );
+                        }
                     }
                 }
             }
-        }
-        // Add traits for the new profession (and perhaps scenario, if, for example,
-        // both the scenario and old profession require the same trait)
-        u.add_traits();
+            // Add traits for the new profession (and perhaps scenario, if, for example,
+            // both the scenario and old profession require the same trait)
+            u.add_traits();
 
-        cc_uistate.recalc_hobbies = true;
-        cc_uistate.recalc_traits = true;
-        cc_uistate.cached_profession_inventory.clear();
-        break;
-    }
-    case CHARCREATOR_BACKGROUND: {
-        select( menu );
-        if( !cc_uistate.hobby_conflict_check( u ) ) {
-            return;
+            cc_uistate.recalc_hobbies = true;
+            cc_uistate.recalc_traits = true;
+            cc_uistate.cached_profession_inventory.clear();
+            break;
         }
+        case CHARCREATOR_BACKGROUND: {
+            select( menu );
+            if( !cc_uistate.hobby_conflict_check( u ) ) {
+                return;
+            }
 
-        const profession *selected_hobby = &*cc_uistate.get_selected_hobby();
-        // Toggle hobby
-        bool enabling = false;
-        if( u.hobbies.count( selected_hobby ) == 0 ) {
-            // Add hobby, and decrement point cost
-            u.hobbies.insert( selected_hobby );
-            enabling = true;
-        } else {
-            // Remove hobby and refund point cost
-            u.hobbies.erase( selected_hobby );
-        }
+            const profession *selected_hobby = &*cc_uistate.get_selected_hobby();
+            // Toggle hobby
+            bool enabling = false;
+            if( u.hobbies.count( selected_hobby ) == 0 ) {
+                // Add hobby, and decrement point cost
+                u.hobbies.insert( selected_hobby );
+                enabling = true;
+            } else {
+                // Remove hobby and refund point cost
+                u.hobbies.erase( selected_hobby );
+            }
 
-        // Add or remove traits from hobby
-        for( const trait_and_var &cur : selected_hobby->get_locked_traits() ) {
-            const trait_id &trait = cur.trait;
-            if( enabling ) {
-                if( !u.has_trait( trait ) ) {
-                    u.toggle_trait_deps( trait );
+            // Add or remove traits from hobby
+            for( const trait_and_var &cur : selected_hobby->get_locked_traits() ) {
+                const trait_id &trait = cur.trait;
+                if( enabling ) {
+                    if( !u.has_trait( trait ) ) {
+                        u.toggle_trait_deps( trait );
+                    }
+                    continue;
                 }
-                continue;
-            }
-            int from_other_hobbies = u.prof->is_locked_trait( trait ) ? 1 : 0;
-            for( const profession *hby : u.hobbies ) {
-                if( hby->ident() != selected_hobby->ident() && hby->is_locked_trait( trait ) ) {
-                    from_other_hobbies++;
+                int from_other_hobbies = u.prof->is_locked_trait( trait ) ? 1 : 0;
+                for( const profession *hby : u.hobbies ) {
+                    if( hby->ident() != selected_hobby->ident() && hby->is_locked_trait( trait ) ) {
+                        from_other_hobbies++;
+                    }
                 }
+                if( from_other_hobbies > 0 ) {
+                    continue;
+                }
+                u.toggle_trait_deps( trait );
             }
-            if( from_other_hobbies > 0 ) {
-                continue;
+
+            cc_uistate.recalc_traits = true;
+            cc_uistate.recalc_hobbies_taken = true;
+            cc_uistate.recalc_hobbies_taken_list( u );
+            break;
+        }
+        case CHARCREATOR_STATS: {
+            select( menu );
+            const int selected_stat_index = cc_uistate.selected_stat_index;
+
+            character_stat selected_stat = static_cast<character_stat>( selected_stat_index );
+            const int stat_queried = cc_uistate.stats[selected_stat_index];
+            number_input_popup<int> stat_query( 0, stat_queried,
+                                                string_format( _( "Set new %s (between %d and %d):" ),
+                                                        _( io::enum_to_full_string( selected_stat ) ),
+                                                        CHARACTER_STAT_MIN, CHARACTER_STAT_MAX ) );
+            int stat_queried_result = stat_query.query();
+            const int stat_result_clamped = std::clamp( stat_queried_result, CHARACTER_STAT_MIN,
+                                            CHARACTER_STAT_MAX );
+            if( stat_result_clamped != stat_queried ) {
+                set_stat_base( u, selected_stat, stat_result_clamped );
+                cc_uistate.stats[selected_stat_index] = stat_result_clamped;
             }
-            u.toggle_trait_deps( trait );
+
+            break;
         }
+        case CHARCREATOR_TRAITS: {
+            select( menu );
+            int inc_type = 0;
+            const trait_id cur_trait = cc_uistate.get_selected_trait();
+            std::string variant;
 
-        cc_uistate.recalc_traits = true;
-        cc_uistate.recalc_hobbies_taken = true;
-        cc_uistate.recalc_hobbies_taken_list( u );
-        break;
-    }
-    case CHARCREATOR_STATS: {
-        select( menu );
-        const int selected_stat_index = cc_uistate.selected_stat_index;
+            // Look through the profession bionics, and see if any of them conflict with this trait
+            std::vector<bionic_id> cbms_blocking_trait = bionics_cancelling_trait( u.prof->CBMs(), cur_trait );
+            const std::unordered_set<trait_id> conflicting_traits = u.get_conflicting_traits( cur_trait );
 
-        character_stat selected_stat = static_cast<character_stat>( selected_stat_index );
-        const int stat_queried = cc_uistate.stats[selected_stat_index];
-        number_input_popup<int> stat_query( 0, stat_queried,
-                                            string_format( _( "Set new %s (between %d and %d):" ),
-                                                    _( io::enum_to_full_string( selected_stat ) ),
-                                                    CHARACTER_STAT_MIN, CHARACTER_STAT_MAX ) );
-        int stat_queried_result = stat_query.query();
-        const int stat_result_clamped = std::clamp( stat_queried_result, CHARACTER_STAT_MIN,
-                                        CHARACTER_STAT_MAX );
-        if( stat_result_clamped != stat_queried ) {
-            set_stat_base( u, selected_stat, stat_result_clamped );
-            cc_uistate.stats[selected_stat_index] = stat_result_clamped;
-        }
-
-        break;
-    }
-    case CHARCREATOR_TRAITS: {
-        select( menu );
-        int inc_type = 0;
-        const trait_id cur_trait = cc_uistate.get_selected_trait();
-        std::string variant;
-
-        // Look through the profession bionics, and see if any of them conflict with this trait
-        std::vector<bionic_id> cbms_blocking_trait = bionics_cancelling_trait( u.prof->CBMs(), cur_trait );
-        const std::unordered_set<trait_id> conflicting_traits = u.get_conflicting_traits( cur_trait );
-
-        if( u.has_trait( cur_trait ) ) {
-            if( !cur_trait->variants.empty() ) {
-                const mutation_variant *rval = char_creation::variant_trait_selection_menu( cur_trait );
-                if( rval == nullptr ) {
+            if( u.has_trait( cur_trait ) ) {
+                if( !cur_trait->variants.empty() ) {
+                    const mutation_variant *rval = char_creation::variant_trait_selection_menu( cur_trait );
+                    if( rval == nullptr ) {
+                        inc_type = -1;
+                    } else {
+                        u.set_mut_variant( cur_trait, rval );
+                    }
+                } else {
                     inc_type = -1;
-                } else {
-                    u.set_mut_variant( cur_trait, rval );
-                }
-            } else {
-                inc_type = -1;
 
-                if( get_scenario()->is_locked_trait( cur_trait ) ) {
-                    inc_type = 0;
-                    popup( _( "Your scenario of %s prevents you from removing this trait." ),
-                           get_scenario()->gender_appropriate_name( u.male ) );
-                } else if( u.prof->is_locked_trait( cur_trait ) ) {
-                    inc_type = 0;
-                    popup( _( "Your profession of %s prevents you from removing this trait." ),
-                           u.prof->gender_appropriate_name( u.male ) );
-                }
-                for( const profession *hobbies : u.hobbies ) {
-                    if( hobbies->is_locked_trait( cur_trait ) ) {
+                    if( get_scenario()->is_locked_trait( cur_trait ) ) {
                         inc_type = 0;
-                        popup( _( "Your background of %s prevents you from removing this trait." ),
-                               hobbies->gender_appropriate_name( u.male ) );
+                        popup( _( "Your scenario of %s prevents you from removing this trait." ),
+                               get_scenario()->gender_appropriate_name( u.male ) );
+                    } else if( u.prof->is_locked_trait( cur_trait ) ) {
+                        inc_type = 0;
+                        popup( _( "Your profession of %s prevents you from removing this trait." ),
+                               u.prof->gender_appropriate_name( u.male ) );
+                    }
+                    for( const profession *hobbies : u.hobbies ) {
+                        if( hobbies->is_locked_trait( cur_trait ) ) {
+                            inc_type = 0;
+                            popup( _( "Your background of %s prevents you from removing this trait." ),
+                                   hobbies->gender_appropriate_name( u.male ) );
+                        }
                     }
                 }
-            }
-        } else if( !conflicting_traits.empty() ) {
-            std::vector<std::string> conflict_names;
-            conflict_names.reserve( conflicting_traits.size() );
-            for( const trait_id &trait : conflicting_traits ) {
-                conflict_names.emplace_back( u.mutation_name( trait ) );
-            }
-            popup( _( "You already picked some conflicting traits: %s." ),
-                   enumerate_as_string( conflict_names ) );
-        } else if( get_scenario()->is_forbidden_trait( cur_trait ) ) {
-            popup( _( "The scenario you picked prevents you from taking this trait!" ) );
-        } else if( u.prof->is_forbidden_trait( cur_trait ) ) {
-            popup( _( "Your profession of %s prevents you from taking this trait." ),
-                   u.prof->gender_appropriate_name( u.male ) );
-        } else if( !cbms_blocking_trait.empty() ) {
-            // Grab a list of the names of the bionics that block this trait
-            // So that the player know what is preventing them from taking it
-            std::vector<std::string> conflict_names;
-            conflict_names.reserve( cbms_blocking_trait.size() );
-            for( const bionic_id &conflict : cbms_blocking_trait ) {
-                conflict_names.emplace_back( conflict->name.translated() );
-            }
-            popup( _( "The following bionics prevent you from taking this trait: %s." ),
-                   enumerate_as_string( conflict_names ) );
-        } else {
-            if( !cur_trait->variants.empty() ) {
-                const mutation_variant *rval = char_creation::variant_trait_selection_menu( cur_trait );
-                if( rval != nullptr ) {
-                    inc_type = 1;
-                    variant = rval->id;
-                } else {
-                    inc_type = 0;
+            } else if( !conflicting_traits.empty() ) {
+                std::vector<std::string> conflict_names;
+                conflict_names.reserve( conflicting_traits.size() );
+                for( const trait_id &trait : conflicting_traits ) {
+                    conflict_names.emplace_back( u.mutation_name( trait ) );
                 }
+                popup( _( "You already picked some conflicting traits: %s." ),
+                       enumerate_as_string( conflict_names ) );
+            } else if( get_scenario()->is_forbidden_trait( cur_trait ) ) {
+                popup( _( "The scenario you picked prevents you from taking this trait!" ) );
+            } else if( u.prof->is_forbidden_trait( cur_trait ) ) {
+                popup( _( "Your profession of %s prevents you from taking this trait." ),
+                       u.prof->gender_appropriate_name( u.male ) );
+            } else if( !cbms_blocking_trait.empty() ) {
+                // Grab a list of the names of the bionics that block this trait
+                // So that the player know what is preventing them from taking it
+                std::vector<std::string> conflict_names;
+                conflict_names.reserve( cbms_blocking_trait.size() );
+                for( const bionic_id &conflict : cbms_blocking_trait ) {
+                    conflict_names.emplace_back( conflict->name.translated() );
+                }
+                popup( _( "The following bionics prevent you from taking this trait: %s." ),
+                       enumerate_as_string( conflict_names ) );
             } else {
-                inc_type = 1;
+                if( !cur_trait->variants.empty() ) {
+                    const mutation_variant *rval = char_creation::variant_trait_selection_menu( cur_trait );
+                    if( rval != nullptr ) {
+                        inc_type = 1;
+                        variant = rval->id;
+                    } else {
+                        inc_type = 0;
+                    }
+                } else {
+                    inc_type = 1;
+                }
             }
-        }
 
-        //inc_type is either -1 or 1, so we can just multiply by it to invert
-        if( inc_type != 0 ) {
-            u.toggle_trait_deps( cur_trait, variant );
+            //inc_type is either -1 or 1, so we can just multiply by it to invert
+            if( inc_type != 0 ) {
+                u.toggle_trait_deps( cur_trait, variant );
+            }
+            break;
         }
-        break;
-    }
-    case CHARCREATOR_SKILLS: {
-        select( menu );
-        const skill_id skill_queried = cc_uistate.get_selected_skill();
-        int previous_skill_level = u.get_skill_level( skill_queried );
-        number_input_popup<int> skill_query( 0, previous_skill_level,
-                                             string_format( _( "Set new %s skill level (between %d and %d):" ),
-                                                     skill_queried->name(), MIN_SKILL, MAX_SKILL ) );
-        int skill_queried_result = skill_query.query();
-        if( skill_queried_result != previous_skill_level ) {
-            const int skill_result_clamped = std::clamp( skill_queried_result, MIN_SKILL, MAX_SKILL );
-            u.set_skill_level( skill_queried, skill_result_clamped );
-            u.set_knowledge_level( skill_queried, skill_result_clamped );
+        case CHARCREATOR_SKILLS: {
+            select( menu );
+            const skill_id skill_queried = cc_uistate.get_selected_skill();
+            int previous_skill_level = u.get_skill_level( skill_queried );
+            number_input_popup<int> skill_query( 0, previous_skill_level,
+                                                 string_format( _( "Set new %s skill level (between %d and %d):" ),
+                                                         skill_queried->name(), MIN_SKILL, MAX_SKILL ) );
+            int skill_queried_result = skill_query.query();
+            if( skill_queried_result != previous_skill_level ) {
+                const int skill_result_clamped = std::clamp( skill_queried_result, MIN_SKILL, MAX_SKILL );
+                u.set_skill_level( skill_queried, skill_result_clamped );
+                u.set_knowledge_level( skill_queried, skill_result_clamped );
+            }
+            break;
         }
-        break;
-    }
-    default:
-        break;
+        default:
+            break;
     }
     cc_uistate.recalc_rating = true;
     ui_parent->update_uilist_entries();
@@ -3890,29 +3892,29 @@ void character_creator_callback::select( uilist *menu )
 {
     int menu_selected = menu->selected;
     switch( cc_uistate.selected_tab ) {
-    case CHARCREATOR_SCENARIO:
-        cc_uistate.selected_scenario_index = menu_selected;
-        break;
-    case CHARCREATOR_PROFESSION:
-        cc_uistate.selected_profession_index = menu_selected;
-        cc_uistate.cached_profession_inventory.clear();
-        break;
-    case CHARCREATOR_BACKGROUND:
-        cc_uistate.selected_hobby_index = menu_selected;
-        break;
-    case CHARCREATOR_STATS:
-        cc_uistate.selected_stat_index = menu_selected;
-        break;
-    case CHARCREATOR_TRAITS: {
-        cc_uistate.selected_trait_index = menu_selected < 0 ? 0 : menu_selected;
-        break;
-    }
-    case CHARCREATOR_SKILLS: {
-        cc_uistate.selected_skill_index = menu_selected;
-        break;
-    }
-    default:
-        break;
+        case CHARCREATOR_SCENARIO:
+            cc_uistate.selected_scenario_index = menu_selected;
+            break;
+        case CHARCREATOR_PROFESSION:
+            cc_uistate.selected_profession_index = menu_selected;
+            cc_uistate.cached_profession_inventory.clear();
+            break;
+        case CHARCREATOR_BACKGROUND:
+            cc_uistate.selected_hobby_index = menu_selected;
+            break;
+        case CHARCREATOR_STATS:
+            cc_uistate.selected_stat_index = menu_selected;
+            break;
+        case CHARCREATOR_TRAITS: {
+            cc_uistate.selected_trait_index = menu_selected < 0 ? 0 : menu_selected;
+            break;
+        }
+        case CHARCREATOR_SKILLS: {
+            cc_uistate.selected_skill_index = menu_selected;
+            break;
+        }
+        default:
+            break;
     }
 }
 
