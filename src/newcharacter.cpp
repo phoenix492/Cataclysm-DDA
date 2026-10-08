@@ -2619,6 +2619,7 @@ void character_creator_ui::setup_new_uilist()
                                           CHARACTER_CREATOR_SCENARIOS_TOUGH.translated() );
                 new_uilist->add_category( CHARACTER_CREATOR_SCENARIOS_CHALLENGE.translated(),
                                           CHARACTER_CREATOR_SCENARIOS_CHALLENGE.translated() );
+                break;
             }
             default:
                 // do nothing; doesn't use a uilist
