@@ -1438,7 +1438,7 @@
     "allowed_locs": [ "sloc_sewer" ],
     "reveal_locale": false,
     "distance_initial_visibility": 0,
-    "flags": [ "LONE_START", "STANDARD" ]
+    "flags": [ "LONE_START", "CHALLENGE" ]
   },
   {
     "type": "scenario",
@@ -1450,7 +1450,7 @@
     "allowed_locs": [ "sloc_nesw_manhole" ],
     "requirement": "achievement_kill_10_monsters",
     "map_extra": "mx_laststand",
-    "flags": [ "CITY_START", "LONE_START", "TOUGH" ]
+    "flags": [ "CITY_START", "LONE_START", "CHALLENGE" ]
   },
   {
     "type": "scenario",
