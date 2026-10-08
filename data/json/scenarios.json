@@ -967,7 +967,7 @@
     "start_name": "Crash Site",
     "map_extra": "mx_mayhem_crash_start",
     "distance_initial_visibility": 0,
-    "flags": [ "HELI_CRASH", "LONE_START", "TOUGH" ]
+    "flags": [ "HELI_CRASH", "LONE_START", "CHALLENGE" ]
   },
   {
     "type": "scenario",
