@@ -2580,7 +2580,6 @@ void character_creator_ui::setup_new_uilist()
                 break;
             }
             case CHARCREATOR_SCENARIO: {
-                cc_uistate.recalc_scenario_list( u );
                 std::vector<const scenario *> &sorted_scenarios = cc_uistate.sorted_scenarios;
 
                 new_uilist->set_category_filter( [&]( const uilist_entry & entry,
