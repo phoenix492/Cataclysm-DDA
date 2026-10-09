@@ -834,7 +834,7 @@
     "reveal_locale": false,
     "distance_initial_visibility": 0,
     "origin_offset": [ 10, 0 ],
-    "flags": [ "LONE_START", "TOUGH" ]
+    "flags": [ "LONE_START", "STANDARD" ]
   },
   {
     "type": "scenario",
