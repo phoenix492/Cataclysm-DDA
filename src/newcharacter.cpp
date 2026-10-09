@@ -2734,6 +2734,7 @@ void character_creator_ui::update_uilist_entries()
     if( menu ) {
         menu->desired_bounds = uilist_reset_desired_bounds();
         menu->filterlist();
+        menu->scrollby( uilist::scroll_amount::abs( menu->fselected ) );
         menu->setup();
     }
 }
