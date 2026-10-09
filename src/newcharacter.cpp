@@ -2656,6 +2656,7 @@ void character_creator_ui::update_uilist_entries()
                 entry.enabled = current_scenario->can_pick().success();
                 menu->addentry( entry );
             }
+            menu->set_selected( cc_uistate.selected_scenario_index );
             break;
         }
         case CHARCREATOR_PROFESSION: {
@@ -2671,6 +2672,7 @@ void character_creator_ui::update_uilist_entries()
                 entry.enabled = current_profession->can_pick().success();
                 menu->addentry( entry );
             }
+            menu->set_selected( cc_uistate.selected_profession_index );
             break;
         }
         case CHARCREATOR_BACKGROUND: {
