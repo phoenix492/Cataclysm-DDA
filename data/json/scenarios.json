@@ -1466,5 +1466,30 @@
     "requirement": "achievement_survive_one_day",
     "flags": [ "CITY_START", "LONE_START", "SUR_START", "STANDARD" ],
     "surround_groups": [ [ "GROUP_BLACK_ROAD", 70.0 ] ]
+  },
+  {
+    "type": "scenario",
+    "id": "two_months_later",
+    "name": "After The End",
+    "points": 2,
+    "description": "Two months ago, the sky broke apart and the world as you knew it came to an end.  Now, you're one of the lucky few who have managed to somewhat adapt to this new world and its strange rules, and it has began to dawn on you that this is a nightmare you will never wake from.",
+    "start_name": "Safe Building",
+    "start_of_cataclysm": { "hour": 0, "day": 56, "season": "spring", "year": 1 },
+    "start_of_game": { "hour": 8, "day": 31, "season": "summer", "year": 1 },
+    "allowed_locs": [
+      "sloc_hermit_shack",
+      "sloc_farm_survivalist",
+      "sloc_cabin",
+      "sloc_lmoe",
+      "sloc_horse_ranch",
+      "sloc_lighthouse_ground",
+      "sloc_lighthouse_small_ground",
+      "sloc_lodge_ground",
+      "sloc_light_industry_scen"
+    ],
+    "requirement": "achievement_survive_91_days",
+    "add_professions": true,
+    "professions": [  ],
+    "flags": [ "LONE_START", "FORGIVING" ]
   }
 ]
